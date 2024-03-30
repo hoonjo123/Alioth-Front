@@ -3,7 +3,8 @@
   <AppSidebar></AppSidebar>
   <div>
     <v-divider></v-divider>
-    <p>계약 추가 수정 페이지</p>
+    <h2>계약 추가 수정 페이지</h2>
+    <v-divider></v-divider>
   </div>
 </template>
 

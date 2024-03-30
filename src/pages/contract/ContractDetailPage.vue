@@ -3,7 +3,9 @@
   <AppSidebar></AppSidebar>
   <div>
     <v-divider></v-divider>
-    <p>계약 추가 수정 페이지</p>
+    <p>계약 상세 조회 페이지</p>
+    <p><button onclick="location.href=`/ContractList/AddModify`">수정</button></p>
+    <p><button onclick="location.href=`/ContractList/Cancel`">해약</button></p>
   </div>
 </template>
 
