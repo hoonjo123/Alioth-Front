@@ -3,8 +3,9 @@
   <AppSidebar></AppSidebar>
   <div>
     <v-divider></v-divider>
-    <h2>매출 메인 화면</h2>
+    <h2>건의사항 상세조회</h2>
     <v-divider></v-divider>
+    <p><button onclick="location.href=`/BoardList/SuggestionBoardModify`">건의사항 글 수정</button></p>
   </div>
 </template>
 

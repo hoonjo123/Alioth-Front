@@ -3,7 +3,7 @@
   <AppSidebar></AppSidebar>
   <div>
     <v-divider></v-divider>
-    <h2>매출 메인 화면</h2>
+    <h2>팀매출조회</h2>
     <v-divider></v-divider>
   </div>
 </template>

@@ -3,7 +3,8 @@
   <AppSidebar></AppSidebar>
   <div>
     <v-divider></v-divider>
-    <p>메인</p>
+    <h1>메인</h1>
+    <v-divider></v-divider>
   </div>
 </template>
 

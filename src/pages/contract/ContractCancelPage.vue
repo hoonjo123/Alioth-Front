@@ -3,8 +3,7 @@
   <AppSidebar></AppSidebar>
   <div>
     <v-divider></v-divider>
-    <h2>매출 메인 화면</h2>
-    <v-divider></v-divider>
+    <p>계약 취소 페이지</p>
   </div>
 </template>
 

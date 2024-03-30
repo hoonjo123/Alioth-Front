@@ -3,8 +3,9 @@
   <AppSidebar></AppSidebar>
   <div>
     <v-divider></v-divider>
-    <h2>매출 메인 화면</h2>
+    <h2>사원 상세 조회 페이지(관리자)</h2>
     <v-divider></v-divider>
+    <p><button onclick="location.href=`/SalesMembersList/Modify`">사원정보 수정</button></p>
   </div>
 </template>
 

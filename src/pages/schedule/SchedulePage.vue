@@ -3,7 +3,8 @@
   <AppSidebar></AppSidebar>
   <div>
     <v-divider></v-divider>
-    <p>일정</p>
+    <h2>일정</h2>
+    <v-divider></v-divider>
   </div>
 </template>
 

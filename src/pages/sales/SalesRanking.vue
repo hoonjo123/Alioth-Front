@@ -3,7 +3,7 @@
   <AppSidebar></AppSidebar>
   <div>
     <v-divider></v-divider>
-    <h2>매출 메인 화면</h2>
+    <h2>개인 및 팀 매출 순위</h2>
     <v-divider></v-divider>
   </div>
 </template>
