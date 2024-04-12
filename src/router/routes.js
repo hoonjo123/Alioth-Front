@@ -97,7 +97,7 @@ const routes = [
     component: LoginPage
   },
   {
-    path: '/Login/FindPassword',
+    path: '/Login/PasswordFind',
     component: PasswordFind
   },
 

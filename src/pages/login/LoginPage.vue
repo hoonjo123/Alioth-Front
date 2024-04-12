@@ -63,7 +63,7 @@ export default {
       },
     
     goToFindPassword() {
-      this.$router.push("/Login/FindPassword");
+      this.$router.push("/Login/PasswordFind");
     },
   }
 }
