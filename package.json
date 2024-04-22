@@ -29,7 +29,8 @@
     "vue": "^3.4.21",
     "vue-google-charts": "^1.1.0",
     "vue-toastification": "^2.0.0-rc.5",
-    "vuetify": "^3.5.16"
+    "vuetify": "^3.5.16",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
