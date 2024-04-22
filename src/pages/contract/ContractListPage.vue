@@ -5,8 +5,6 @@
     <v-divider></v-divider>
     <v-card flat>
       <v-spacer></v-spacer>
-
-
       <v-row align="center">
         <v-col cols="4">
           <v-text-field 
@@ -59,6 +57,7 @@
       </v-row>
       <v-divider></v-divider>
       <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
       <ListComponent :columns="tableColumns" :rows="tableRows" @row-click="navigateToDetail" />
     </v-card>
   </v-main>
@@ -85,7 +84,6 @@ export default {
       { title: '계약일자', key: 'contractDate' },
       { title: '계약만료일자', key: 'contractExpireDate'},
       { title: '계약상태', key: 'contractStatus' }
-
     ]);
     const tableRows = ref([]);
     const search = ref('');
@@ -198,7 +196,6 @@ export default {
 
 
 <style scoped>
-
 .v-text-field, .v-select, .v-btn {
   height: 50px;
 }
