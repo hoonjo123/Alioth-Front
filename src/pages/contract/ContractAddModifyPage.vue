@@ -76,7 +76,7 @@ export default {
     submitForm() {
       const router = this.$router;
       if (this.$refs.form.validate()) {
-        
+
         const formData = {
           ...this.form,
           contractDate: this.formatDateTime(this.form.contractDate),

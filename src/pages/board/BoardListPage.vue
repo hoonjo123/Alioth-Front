@@ -18,7 +18,7 @@
           글쓰기
         </v-btn>
       </v-toolbar>
-      <ListComponent 
+      <ListComponent
         :columns="headers"
         :rows="formattedItems"
         @row-click="handleRowClick"
@@ -28,7 +28,6 @@
 </template>
 
 <script>
-
 import { useRouter } from 'vue-router';
 import AppSidebar from "@/layouts/AppSidebar.vue";
 import AppHeader from "@/layouts/AppHeader.vue";
@@ -89,7 +88,8 @@ export default {
       const baseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:8080';
       const apiEndpoint = this.model === 'Announcement' ? 'list' : 'suggestions-list';
       const apiURL = `${baseUrl}/api/board/${apiEndpoint}`;
-      axiosInstance.get(apiURL) 
+
+      axiosInstance.get(apiURL)
       .then(response => {
         this.items = response.data.result || [];
       }).catch(error => {
