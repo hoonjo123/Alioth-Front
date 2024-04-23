@@ -7,7 +7,8 @@
       <v-toolbar flat>
         <v-switch
           v-model="model"
-          :label="`${model === 'Announcement' ? '공지사항' : '건의사항'}`"
+          :label="model === 'Announcement' ? '공지사항' : '건의사항'"
+          :color="model === 'Announcement' ? 'success' : 'info'"
           false-value="Announcement"
           true-value="Suggestion"
           hide-details
@@ -20,13 +21,17 @@
       </v-toolbar>
       <ListComponent
         :columns="headers"
-        :rows="formattedItems"
+        :rows="formattedItems.slice((currentPage-1)*10, currentPage*10)"
         @row-click="handleRowClick"
       />
+      <v-pagination
+        v-model="currentPage"
+        :length="pageCount"
+        class="pt-2"
+      ></v-pagination>
     </v-main>
   </v-container>
 </template>
-
 <script>
 import { useRouter } from 'vue-router';
 import AppSidebar from "@/layouts/AppSidebar.vue";
@@ -39,7 +44,7 @@ export default {
   components: {
     AppHeader,
     AppSidebar,
-    ListComponent // 등록된 컴포넌트
+    ListComponent 
   },
   setup() {
     const router = useRouter();
@@ -49,6 +54,8 @@ export default {
     return {
       model: 'Announcement',
       items: [],
+      currentPage: 1,
+      pageCount: 0,
       headers: [
         { title: 'No', key: 'boardId' },
         { title: '제목', key: 'title' },
@@ -60,6 +67,9 @@ export default {
     };
   },
   computed: {
+    pageCount() {
+    return Math.ceil(this.items.length / 10);
+  },
     formattedItems() {
       return this.items.map(item => ({
         ...item,
@@ -108,6 +118,8 @@ export default {
   }
 };
 </script>
+
+
 
 <style scoped>
 </style>
