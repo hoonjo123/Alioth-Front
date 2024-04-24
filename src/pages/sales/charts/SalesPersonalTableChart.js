@@ -63,4 +63,17 @@ export default defineComponent({
         type: 'Table',
       });
   },
+  data() {
+    return {
+      selectedPeriod: "월",
+      salesStore: useSalesStore(),
+    }
+  },
+  methods: {
+    callTeamTable() {
+      console.log("응답받음");
+      getSalesMemberData();
+    }
+  }
+  
 });
