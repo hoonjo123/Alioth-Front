@@ -4,11 +4,9 @@
     <AppHeader></AppHeader>
     <v-container fluid>
       <v-card flat>
-        <v-row align="center">
-          <v-col cols="auto">
-            <v-card class="mx-auto my-8" >
-              <span> 팀 {{ state.teamName }}</span>
-            </v-card>
+        <v-row>
+          <v-col cols="4" offset="3"> <!-- 팀 명 -->
+            <v-card text="팀명" variant="outlined"> {{ state.teamName }} </v-card>
           </v-col>
           <v-col cols="auto">
             <v-card variant="outlined" class="team-card">
