@@ -3,7 +3,6 @@
                        class="blue-lighten-5">
     <v-list>
       <v-list-item prepend-avatar="/Alioth.png">
-
           <v-list-item-title> Alioth </v-list-item-title>
        </v-list-item>
     </v-list>
