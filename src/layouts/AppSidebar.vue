@@ -30,7 +30,7 @@
     <template v-slot:append>
       <v-list>
         <span class="small-text" > 오늘도 좋은 하루 보내세요! </span>
-        <v-list-item prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg" @click="this.$router.push(`/SalesMembersList/Detail/${loginStore.memberCode}`);">
+        <v-list-item :prepend-avatar="loginStore.memberImage" @click="this.$router.push(`/SalesMembersList/Detail/${loginStore.memberCode}`);">
           <template v-if="loginStore.memberRank">
             <v-list-item-title>{{ loginStore.memberEmail }}</v-list-item-title>
             <v-row align="center" no-gutters>
@@ -69,7 +69,7 @@ export default {
             {title: '전사', url: '/Sales/Total'},
           ]
         }
-      ]
+      ],
     };
   },
   mounted() {
@@ -77,7 +77,6 @@ export default {
   },
   methods: {
     handleMenuClick(route) {
-
       this.$router.push(route);
     },
     handleSubMenuClick(route) {
@@ -88,7 +87,9 @@ export default {
       if (confirm('로그아웃하시겠습니까?')) {
         alert('로그아웃 되었습니다.');
         localStorage.removeItem('accessToken'); // 토큰 삭제
+        localStorage.removeItem('refreshToken')
         this.$router.push('/Login');
+        window.location.reload();
       }
     }
   }
