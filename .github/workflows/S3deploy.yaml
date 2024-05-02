@@ -33,4 +33,4 @@ jobs:
 
       - name: deploy to s3
         run: |
-          aws s3 sync ./dist s3://aliothfront
+          aws s3 sync ./dist s3://www.alioth.site
