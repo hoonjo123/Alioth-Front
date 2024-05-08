@@ -4,13 +4,68 @@
 
     <v-main>
       <AppHeader></AppHeader>
-      <div>
-        <h1>메인</h1>
-      </div>
 
-      <VCol cols="12" md="10">
-        <AnalyticsTransactions/>
-      </VCol>
+      <v-row class="mt-10">
+        <!-- First Place -->
+        <v-col cols="6">
+          <v-card class="pa-5 text-center" color="primary" dark>
+            <v-row align="center" justify="start">
+              <v-col cols="5">
+                <v-icon size="72" color="yellow">mdi-crown</v-icon>
+              </v-col>
+              <v-col cols="auto">
+                <h1 class="headline white--text">보험의 신</h1>
+              </v-col>
+            </v-row>
+          </v-card>
+          <v-card class="pa-5 text-center" color="#FF9800" dark>
+            <h1 class="headline white--text">{{ godMember }}</h1>
+          </v-card>
+          <v-card class="pa-5 text-center" color="#FF5252" dark>
+            <v-row align="center" justify="center">
+              <h2 class="headline white--text">계약 금액 : </h2>
+              <h2 class="headline white--text ml-5">{{ godPrice }}</h2>
+            </v-row>
+          </v-card>
+          <v-card class="pa-5 text-center" color="#D50000" dark>
+            <v-row align="center" justify="center">
+              <h2 class="headline white--text">계약 건 : </h2>
+              <h2 class="headline white--text ml-5">{{ godCount }}</h2>
+            </v-row>
+          </v-card>
+        </v-col>
+
+        <!-- Second Place -->
+        <v-col cols="6">
+          <v-card class="pa-5 text-center" color="#1E88E5" dark>
+            <v-row align="center" justify="start">
+              <v-col cols="5">
+                <v-icon size="72" color="yellow">mdi-medal</v-icon>
+              </v-col>
+              <v-col cols="auto">
+                <h1 class="headline white--text">최우수 지점</h1>
+              </v-col>
+            </v-row>
+          </v-card>
+          <v-card class="pa-5 text-center" color="#4DD0E1" dark>
+            <h1 class="headline white--text">{{ bestTeamName }}</h1>
+          </v-card>
+          <v-card class="pa-5 text-center" color="#039BE5">
+            <v-row align="center" justify="center">
+              <h2 class="headline white--text">계약 금액 : </h2>
+              <h2 class="headline white--text ml-5">{{ bestTeamPrice }}</h2>
+            </v-row>
+          </v-card>
+          <v-card class="pa-5 text-center" color="#0277BD" dark>
+            <v-row align="center" justify="center">
+              <h2 class="headline white--text">계약 건 : </h2>
+              <h2 class="headline white--text ml-5">{{ bestTeamCount }}</h2>
+            </v-row>
+          </v-card>
+
+        </v-col>
+      </v-row>
+
     </v-main>
   </v-container>
 
@@ -19,18 +74,73 @@
 <script>
 import AppHeader from "@/layouts/AppHeader.vue";
 import AppSidebar from "@/layouts/AppSidebar.vue";
-import AnalyticsTransactions from "@/pages/main/charts/AnalyticsTransactions.vue"
-
+import { ref } from 'vue';
+import axios from 'axios';
+import { useSalesStore } from '@/stores/SalesStore';
+import { useLoginInfoStore } from '@/stores/loginInfo';
 
 export default {
   components: {
-    AppSidebar, AppHeader, AnalyticsTransactions
+    AppSidebar, AppHeader,
   },
   setup() {
+    const godMember = "-";
+    const godPrice = "-";
+    const godCount = "-";
+    const bestTeamName = "-";
+    const bestTeamPrice = "-";
+    const bestTeamCount = "-";
 
+    return {
+      godMember, godPrice, godCount,
+      bestTeamName, bestTeamPrice, bestTeamCount,
+    }
+  },
+  data() {
+    return {
 
-    return {}
-  }
+    }
+  },
+  mounted() {
+    this.getMemberGod();
+    this.getBestTeam();
+
+  },
+  methods: {
+    async getMemberGod() {
+      let url = "http://localhost:8081/statistics/api/dashboard/god";
+      console.log(url);
+      await axios.get(url)
+        .then(response => {
+          //console.log("보험의 신 응답결과 : ", response);
+          const resultData = response.data.result;
+          //console.log("보험의 신 응답결과 : ", resultData);
+          this.godMember = resultData.name;
+          this.godPrice = resultData.price;
+          this.godCount = resultData.count;
+        })
+        .catch(error => {
+          console.log("요청할 수 없습니다. : ", error);
+        });
+    },
+    async getBestTeam() {
+      let url = "http://localhost:8081/statistics/api/dashboard/best-team";
+      console.log(url);
+      await axios.get(url)
+        .then(response => {
+          //console.log("보험의 신 응답결과 : ", response);
+          const resultData = response.data.result;
+          console.log("최우수 고과팀 응답결과 : ", resultData);
+          this.bestTeamName = resultData.teamName;
+          this.bestTeamPrice = resultData.price;
+          this.bestTeamCount = resultData.count;
+        })
+        .catch(error => {
+          console.log("요청할 수 없습니다. : ", error);
+        });
+    }
+  },
+
 }
 </script>
 
