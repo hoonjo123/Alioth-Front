@@ -13,7 +13,7 @@
         <v-col cols="5">
           <v-card flat class="myimage pa-3">
             <input type="file" style="display: none" ref="imageInput" @change="handleImageUpload">
-            <img class="default-image" :src="imageUrl" @click="openImageUploader" >
+            <img class="default-image" :src="profile" @click="openImageUploader" >
           </v-card>
         </v-col>
         <v-col cols="7">
@@ -199,10 +199,9 @@ export default {
     const fetchData = () => {
       axiosInstance.get(`${baseUrl}/api/members/details/${props.salesMembersCode}`)
         .then(response => {
-          console.log(response);
           if (response.data && response.data.result) {
             const {
-              profile: profileImageUrl,
+              profileImage: profileImage,
               rank: memberRank,
               birthDay: birthday,
               name: memberName,
@@ -218,7 +217,8 @@ export default {
               teamCode: teamCodes
             } = response.data.result;
 
-            profile.value = profileImageUrl
+
+            profile.value = profileImage
             rank.value = memberRank
             birthDay.value = birthday
             name.value = memberName
@@ -232,6 +232,8 @@ export default {
             performanceReview.value = pr
             teamName.value = teamNames
             teamCode.value = teamCodes
+            console.log(profile.value)
+            console.log(response.data.result)
           } else {
             console.error('Empty response or missing result data');
           }
@@ -243,7 +245,6 @@ export default {
       axiosInstance.get(`${baseUrl}/api/team/list`)
         .then(response => {
           const data = response.data.result;
-          console.log(data)
           data.forEach((item, index) => {
             item.id = index + 1;
           });
@@ -262,9 +263,6 @@ export default {
       }
 
       if (confirm("수정하시겠습니까?")) {
-        console.log("확인")
-        console.log(rank.value)
-        console.log(rank.value.toString())
         axiosInstance.patch(`${baseUrl}/api/members/admin/update/${props.salesMembersCode}`, data)
           .then(res => {
             console.log(res)
