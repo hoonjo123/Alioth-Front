@@ -9,8 +9,8 @@
           <v-card-title class="headline" style="margin-top: 1vw; margin-left:1vw; margin-bottom:1vw; font-family: 'Spoqa Han Sans Neo'">{{board.title }}
           </v-card-title>
           <v-col class="text-right" style="margin-bottom:1vw" >
-            <v-btn v-if="loginStore.memberCode===board.salesMemberCode && loginStore.memberRank!=='FP'" small class="small-btn" variant="tonal" color="#2979FF" style="margin-right: 0.5vw; margin-top: 0.5vw; margin-bottom: 0.75vw" @click="editBoard">수정</v-btn>
-            <v-btn v-if="loginStore.memberCode===board.salesMemberCode && loginStore.memberRank!=='FP'" small class="small-btn" variant="tonal" color="primary" style="margin-right: 1vw; margin-top: 0.5vw; margin-bottom: 0.75vw" @click="deleteBoard">삭제</v-btn>
+            <v-btn v-if="loginStore.memberCode===board.salesMemberCode " small class="small-btn" variant="tonal" color="#2979FF" style="margin-right: 0.5vw; margin-top: 0.5vw; margin-bottom: 0.75vw" @click="editBoard">수정</v-btn>
+            <v-btn v-if="loginStore.memberCode===board.salesMemberCode " small class="small-btn" variant="tonal" color="primary" style="margin-right: 1vw; margin-top: 0.5vw; margin-bottom: 0.75vw" @click="deleteBoard">삭제</v-btn>
           </v-col>
         </v-row>
         <v-divider></v-divider>

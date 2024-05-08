@@ -53,8 +53,7 @@ export default {
       })
 
         .then(response => {
-          console.log(response.data);
-          alert('공지사항이 수정되었습니다.');
+          alert(response.data.message);
           router.push('/BoardList');
         }).catch(error => {
         console.error('게시판 수정 실패:', error);
