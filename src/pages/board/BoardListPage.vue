@@ -135,7 +135,7 @@ export default {
         alert(error.response.data.message);
         this.model = 'Announcement'
         this.items = [];
-        this.fetchData();
+        // this.fetchData();
       });
     },
     navigateToAddPage() {

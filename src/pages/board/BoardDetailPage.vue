@@ -104,7 +104,7 @@
           <v-btn color="#424242" variant="tonal" style="margin-top:1vw" @click="goBack">목록으로</v-btn>
         </v-col>
         <v-col class="text-right">
-          <v-btn variant="tonal" color="#1A237E" style="margin-top:1vw" v-if="answers.length === 0 && !showModal && this.board.boardType === 'SUGGESTION'" @click="showModal = true">답글
+          <v-btn variant="tonal" color="#1A237E" style="margin-top:1vw" v-if="answers.length === 0 && !showModal && this.board.boardType === 'SUGGESTION' && this.board.salesMemberCode !== loginStore.getMemberCode " @click="showModal = true">답글
             작성
           </v-btn>
         </v-col>
