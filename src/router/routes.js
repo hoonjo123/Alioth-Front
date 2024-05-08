@@ -229,6 +229,7 @@ const routes = [
   {
     path: '/ContractList/Modify/:id',
     component: ContractModifyPage,
+    props: true,
     meta: {
       title: '계약 수정',
       requiresAuth: true

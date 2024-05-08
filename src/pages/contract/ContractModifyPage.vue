@@ -7,8 +7,7 @@
         <v-card-text>
           <v-form v-model="valid">
             <v-text-field label="계약 기간(년)" v-model="contract.contractPeriod" :rules="nameRules" required></v-text-field>
-            <v-select label="결제 빈도" v-model="contract.contractPaymentFrequency" :items="paymentFrequencies"
-                      :rules="nameRules" required readonly></v-select>
+            <v-select label="결제 빈도" v-model="contract.contractPaymentFrequency" :items="paymentFrequencies" :rules="nameRules" required></v-select>
             <v-text-field label="지불자(이름)" v-model="contract.contractPayer" :rules="nameRules" required></v-text-field>
             <v-select label="결제 방법" v-model="contract.contractPaymentMethod" :items="paymentMethod" :rules="nameRules" required></v-select>
             <v-select label="계약 상태" v-model="contract.contractStatus" :items="contractStatuses" :rules="nameRules"
@@ -52,7 +51,7 @@ export default {
     const nameRules = [v => !!v || '필수 입력 사항입니다'];
     const paymentMethod = ['계좌이체','카드']
     const paymentFrequencies = ['Monthly', 'Quarter', 'Yearly'];
-    const contractStatuses = ['New', 'Renewal'];
+    const contractStatuses = ['New', 'Renewals'];
 
 
     const fetchContractDetail = () => {
