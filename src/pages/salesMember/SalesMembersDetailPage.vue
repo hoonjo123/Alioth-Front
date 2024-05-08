@@ -371,7 +371,7 @@ export default {
 
    }
     function openImageUploader() {
-      if(loginStore.memberCode.toString()===props.salesMemberCode){
+      if(loginStore.memberCode.toString()===props.salesMembersCode.toString()){
         imageInput.value.click();
       }
     }

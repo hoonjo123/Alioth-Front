@@ -228,7 +228,7 @@ export default {
             router.push('/ContractList');
           }).catch(error => {
           console.error('계약 생성에 실패했습니다:', error);
-          alert('계약 생성에 실패했습니다: ' + (error.response && error.response.data.message ? error.response.data.message : '서버 에러'));
+          alert('계약 생성에 실패했습니다: ' + (error.response.data.message ? error.response.data.message : '서버 에러'));
         });
       }
     }
