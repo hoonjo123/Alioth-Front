@@ -33,7 +33,7 @@
             </v-card-subtitle>
             <v-card-text v-html="answer.content"></v-card-text>
             <v-col class="text-right" v-if="loginStore.memberRank!=='FP'">
-              <v-btn small class="small-btn" variant="tonal" color="#2979FF" @click="openEditModal(answers)"
+              <v-btn small class="small-btn" variant="tonal" color="#2979FF" @click="openEditModal(answer)"
                      style="margin-top: 0.5vw; margin-right: 0.5vw"> 답변 수정
               </v-btn>
               <v-btn small class="small-btn" variant="tonal" color="primary" v-if="loginStore.memberRank!=='FP'" style="margin-top: 0.5vw;" @click="deleteAnswer">답변 삭제
@@ -125,7 +125,7 @@ export default {
   data() {
     return {
       board: {},
-      answers: [],
+      answers: {},
       newAnswer: '',
       currentUser: localStorage.getItem('userId'),
       baseUrl: import.meta.env.VITE_API_SERVER_BASE_URL || 'http://localhost:8080',
@@ -151,6 +151,7 @@ export default {
       return format(parseISO(dateString), 'yyyy-MM-dd HH:mm:ss');
     },
     openEditModal(answer) {
+      console.log(answer.answer_id)
       this.editTitle = answer.title;
       this.editContent = answer.content;
       this.currentEditingId = answer.answer_id;
