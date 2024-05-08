@@ -66,6 +66,24 @@
         </v-col>
       </v-row>
 
+      <v-row class="mt-10" align="center" justify="center">
+        <h2 class="headline white--text">공지사항 미리보기</h2>
+      </v-row>
+      <ListComponent
+          :columns="sugHeaders"
+          :rows="formattedItems"
+          @click="this.$router.push('/BoardList')"
+        />
+
+      <v-row class="mt-10" align="center" justify="center">
+        <h2 class="headline white--text">건의사항 미리보기</h2>
+      </v-row>
+      <ListComponent
+          :columns="annHeaders"
+          :rows="formattedAnnItems"
+          @click="this.$router.push('/BoardList')"
+        />
+
     </v-main>
   </v-container>
 
@@ -76,12 +94,13 @@ import AppHeader from "@/layouts/AppHeader.vue";
 import AppSidebar from "@/layouts/AppSidebar.vue";
 import { ref } from 'vue';
 import axios from 'axios';
-import { useSalesStore } from '@/stores/SalesStore';
-import { useLoginInfoStore } from '@/stores/loginInfo';
+// import { useSalesStore } from '@/stores/SalesStore';
+// import { useLoginInfoStore } from '@/stores/loginInfo';
+import ListComponent from "@/layouts/ListComponent.vue";
 
 export default {
   components: {
-    AppSidebar, AppHeader,
+    AppSidebar, AppHeader, ListComponent,
   },
   setup() {
     const godMember = "-";
@@ -98,13 +117,36 @@ export default {
   },
   data() {
     return {
-
+      sugItems: [],
+      sugHeaders: [
+        { title: 'No', key: 'id' },
+        { title: '제목', key: 'title' },
+        { title: '글쓴이', key: 'memberName' },
+        { title: '작성시간', key: 'created' },
+      ],
+      annItems: [],
+      annHeaders: [
+        { title: 'No', key: 'id' },
+        { title: '제목', key: 'title' },
+        { title: '글쓴이', key: 'memberName' },
+        { title: '작성시간', key: 'created' },
+      ],
     }
   },
   mounted() {
     this.getMemberGod();
     this.getBestTeam();
+    this.getSugBoard();
+    this.getAnnBoard();
+  },
+  computed: {
+    formattedItems() {
+      return this.sugItems.map(sugItems => ({ ...sugItems }));
+    },
 
+    formattedAnnItems() {
+      return this.annItems.map(annItems => ({ ...annItems }));
+    },
   },
   methods: {
     async getMemberGod() {
@@ -138,7 +180,46 @@ export default {
         .catch(error => {
           console.log("요청할 수 없습니다. : ", error);
         });
-    }
+    },
+    async getSugBoard() {
+      const baseUrl = import.meta.env.VITE_API_STATISTICS_BASE_URL
+      const url = `${baseUrl}/api/dashboard/board/sug`;
+      console.log(url);
+      axios.get(url)
+        .then(response => {
+          console.log("공지사항 리스트 응답결과 : ", response.data.result);
+          //this.teamItems = response.data.result || [];
+          this.sugItems = response.data.result || [];
+          this.sugItems = this.sugItems.map((sugItems, index) => ({
+            ...sugItems,
+            id: index + 1,
+          }));
+          console.log(this.sugItems);
+        })
+        .catch(error => {
+          console.log("요청할 수 없습니다. : ", error);
+        });
+    },
+    async getAnnBoard() {
+      const baseUrl = import.meta.env.VITE_API_STATISTICS_BASE_URL
+      const url = `${baseUrl}/api/dashboard/board/ann`;
+      console.log(url);
+      axios.get(url)
+        .then(response => {
+          console.log("건의사항 리스트 응답결과 : ", response.data.result);
+          //this.teamItems = response.data.result || [];
+          this.annItems = response.data.result || [];
+          this.annItems = this.annItems.map((annItems, index) => ({
+            ...annItems,
+            id: index + 1,
+          }));
+          console.log(this.annItems);
+        })
+        .catch(error => {
+          console.log("요청할 수 없습니다. : ", error);
+        });
+    },
+
   },
 
 }
