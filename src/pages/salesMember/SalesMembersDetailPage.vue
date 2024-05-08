@@ -157,7 +157,7 @@ import AppSidebar from "@/layouts/AppSidebar.vue";
 import AppHeader from "@/layouts/AppHeader.vue";
 import axiosInstance from "@/plugins/loginaxios";
 import router from "@/router";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import ListComponent from "@/layouts/ListComponent.vue";
 import {useLoginInfoStore} from "@/stores/loginInfo";
 
@@ -384,7 +384,9 @@ export default {
         },
       }).open();
     }
-
+    watch(() => props.salesMembersCode, () => {
+      fetchData();
+    });
     onMounted(() => {
       fetchData();
       document.addEventListener('click', handleModalClick);
