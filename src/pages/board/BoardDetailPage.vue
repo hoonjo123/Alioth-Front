@@ -9,8 +9,8 @@
           <v-card-title class="headline" style="margin-top: 1vw; margin-left:1vw; margin-bottom:1vw; font-family: 'Spoqa Han Sans Neo'">{{board.title }}
           </v-card-title>
           <v-col class="text-right" style="margin-bottom:1vw" >
-            <v-btn v-if="loginStore.memberCode===board.salesMemberCode || loginStore.memberRank!=='FP'" small class="small-btn" variant="tonal" color="#2979FF" style="margin-right: 0.5vw; margin-top: 0.5vw; margin-bottom: 0.75vw" @click="editBoard">수정</v-btn>
-            <v-btn v-if="loginStore.memberCode===board.salesMemberCode || loginStore.memberRank!=='FP'" small class="small-btn" variant="tonal" color="primary" style="margin-right: 1vw; margin-top: 0.5vw; margin-bottom: 0.75vw" @click="deleteBoard">삭제</v-btn>
+            <v-btn v-if="loginStore.memberCode===board.salesMemberCode && loginStore.memberRank!=='FP'" small class="small-btn" variant="tonal" color="#2979FF" style="margin-right: 0.5vw; margin-top: 0.5vw; margin-bottom: 0.75vw" @click="editBoard">수정</v-btn>
+            <v-btn v-if="loginStore.memberCode===board.salesMemberCode && loginStore.memberRank!=='FP'" small class="small-btn" variant="tonal" color="primary" style="margin-right: 1vw; margin-top: 0.5vw; margin-bottom: 0.75vw" @click="deleteBoard">삭제</v-btn>
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -32,11 +32,12 @@
               <span> | 작성일자 {{ formatDate(answer.created_at) }}</span>
             </v-card-subtitle>
             <v-card-text v-html="answer.content"></v-card-text>
-            <v-col class="text-right" v-if="loginStore.memberRank!=='FP'">
+            <v-col class="text-right" v-if="loginStore.memberRank==='HQ' || answer.salesMemberCode === loginStore.getMemberCode">
               <v-btn small class="small-btn" variant="tonal" color="#2979FF" @click="openEditModal(answer)"
                      style="margin-top: 0.5vw; margin-right: 0.5vw"> 답변 수정
+
               </v-btn>
-              <v-btn small class="small-btn" variant="tonal" color="primary" v-if="loginStore.memberRank!=='FP'" style="margin-top: 0.5vw;" @click="deleteAnswer">답변 삭제
+              <v-btn small class="small-btn" variant="tonal" color="primary" v-if="loginStore.memberRank==='HQ' || answer.salesMemberCode === loginStore.getMemberCode" style="margin-top: 0.5vw;" @click="deleteAnswer(answer)">답변 삭제
               </v-btn>
             </v-col>
 
@@ -263,8 +264,7 @@ export default {
           this.editModalVisible = false;
         })
         .catch(error => {
-          console.error('답글 수정 실패:', error);
-          alert('답글 수정 실패: ' + error.message);
+          alert('답글 수정 실패: ' + error.response.data.message);
         });
     },
     deleteAnswer(answer) {
@@ -278,8 +278,7 @@ export default {
             this.showSuccess = false;
             this.newAnswer = '';
           }).catch(error => {
-          console.error('답글 삭제 실패:', error);
-          alert('답글 삭제 실패: ' + error.message);
+          alert('답글 삭제 실패: ' + error.error.response.data.message);
         });
       }
     },
