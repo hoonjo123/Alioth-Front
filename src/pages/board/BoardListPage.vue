@@ -39,8 +39,9 @@ import AppHeader from "@/layouts/AppHeader.vue";
 import ListComponent from "@/layouts/ListComponent.vue";
 import axiosInstance from '@/plugins/loginaxios';
 import { useLoginInfoStore } from '@/stores/loginInfo.js';
-import { ref, computed,watchEffect } from 'vue';
+import {ref, computed, watchEffect, watch} from 'vue';
 import { useBoardTypeStore } from '@/stores/boardTypeStore.js';
+import {useSalesStore} from "@/stores/SalesStore";
 
 
 export default {
@@ -130,9 +131,11 @@ export default {
         .then(response => {
           this.items = response.data.result || [];
         }).catch(error => {
-        console.error('HTTP 데이터를 가져오는 중 에러 발생:', error);
-        alert('데이터를 가져오는 중 문제가 발생했습니다.');
+
+        alert(error.response.data.message);
+        this.model = 'Announcement'
         this.items = [];
+        this.fetchData();
       });
     },
     navigateToAddPage() {
@@ -140,6 +143,7 @@ export default {
       this.router.push(path);
     },
   },
+
   mounted() {
     // const type = this.$route.query.type || 'Announcement';  // URL에서 type 쿼리 파라미터를 읽음
     // this.model = type;  // model 상태를 업데이트하여 알맞은 목록을 표시
