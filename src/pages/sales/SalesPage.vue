@@ -471,27 +471,21 @@ export default {
       loginStore: useLoginInfoStore(),
       items: [],
       headers: [
-        {title: 'No', key: 'id'},
-        // { title: '사원 이름', key: 'salesMemberName' },
-        // { title: '사원 코드', key: 'salesMemberCode' },
-        {title: '계약 총금액', key: 'contractPrice'},
-        {title: '계약 건수', key: 'contractCount'},
-        {title: '해약 총금액', key: 'cancelPrice'},
-        {title: '해약 건수', key: 'cancelCount'},
-        {title: 'No', key: 'id'},
-        {title: '계약 총금액', key: 'contractPrice'},
-        {title: '계약 건수', key: 'contractCount'},
-        {title: '해약 총금액', key: 'cancelPrice'},
-        {title: '해약 건수', key: 'cancelCount'},
+
+        { title: 'No', key: 'id' },
+        { title: '계약 총금액', key: 'contractPrice' },
+        { title: '계약 건수', key: 'contractCount' },
+        { title: '해약 총금액', key: 'cancelPrice' },
+        { title: '해약 건수', key: 'cancelCount' },
       ],
       teamItems: [],
       teamHeaders: [
-        {title: 'No', key: 'id'},
-        {title: '팀 이름', key: 'teamName'},
-        {title: '계약 총금액', key: 'contractPrice'},
-        {title: '계약 건수', key: 'contractCount'},
-        {title: '해약 총금액', key: 'cancelPrice'},
-        {title: '해약 건수', key: 'cancelCount'},
+        { title: 'No', key: 'id' },
+        { title: '팀 이름', key: 'teamName' },
+        { title: '계약 총금액', key: 'contractPrice' },
+        { title: '계약 건수', key: 'contractCount' },
+        { title: '해약 총금액', key: 'cancelPrice' },
+        { title: '해약 건수', key: 'cancelCount' },
       ],
       statistics: [
         {
@@ -568,6 +562,9 @@ export default {
     formattedTeamItems() {
       return this.teamItems.map(teamItems => ({...teamItems}));
     },
+    formattedTeamItems() {
+      return this.teamItems.map(teamItems => ({ ...teamItems }));
+    },
   },
   methods: {
     applyDate() {
@@ -581,7 +578,7 @@ export default {
     },
     applyTeamDate() {
       useSalesStore().startTeamDate = this.startTeamDate;
-      if (this.startTeamDate !== "") {
+      if(this.startTeamDate !== "") {
         this.teamShot();
       }
 
@@ -590,7 +587,8 @@ export default {
     applyHQDate() {
       useSalesStore().startHQDate = this.startHQDate;
       console.log("전사 날짜 선택: ", this.startHQDate);
-      if (this.startHQDate !== "") {
+
+      if(this.startHQDate !== "") {
         this.hqShot();
         this.hqList();
       }
@@ -601,8 +599,10 @@ export default {
     async memberList() {
       const memberCode = this.loginStore.getMemberCode;
       const date = this.startDate;
+      const baseUrl = import.meta.env.VITE_API_STATISTICS_BASE_URL || 'http://localhost:8081';
 
-      let url = `http://localhost:8081/api/stat/sales/${memberCode}/${date}`;
+      // let url = `http://localhost:8081/api/stat/sales/${memberCode}/${date}`;
+      let url = `${baseUrl}api/stat/sales/${memberCode}/${date}`;
       console.log(url);
 
       await axios.get(url)
@@ -622,8 +622,10 @@ export default {
     async memberShot() {
       const memberCode = this.loginStore.getMemberCode;
       const date = this.startDate;
+      const baseUrl = import.meta.env.VITE_API_STATISTICS_BASE_URL || 'http://localhost:8081';
 
-      let url = `http://localhost:8081/api/stat/sales/${memberCode}/${date}/price`;
+      //let url = `http://localhost:8081/api/stat/sales/${memberCode}/${date}/price`;
+      let url = `${baseUrl}/api/stat/sales/${memberCode}/${date}/price`;
       console.log(url);
 
       await axios.get(url)
@@ -644,7 +646,9 @@ export default {
       const memberTeamCode = this.loginStore.memberTeamCode;
       const date = this.startTeamDate;
 
-      let url = `http://localhost:8081/statistics/api/sales/${memberTeamCode}/${date}/price`;
+      const baseUrl = import.meta.env.VITE_API_STATISTICS_BASE_URL || 'http://localhost:8081';
+      let url = `${baseUrl}/api/sales/${memberTeamCode}/${date}/price`;
+      //let url = `http://localhost:8081/statistics/api/sales/${memberTeamCode}/${date}/price`;
       console.log(url);
 
       await axios.get(url)
@@ -665,7 +669,9 @@ export default {
       // const memberTeamCode = this.loginStore.memberTeamCode;
       const date = this.startHQDate;
 
-      let url = `http://localhost:8081/statistics/api/sales/hq/${date}/price`;
+      const baseUrl = import.meta.env.VITE_API_STATISTICS_BASE_URL || 'http://localhost:8081';
+      let url = `${baseUrl}/api/sales/hq/${date}/price`;
+      //let url = `http://localhost:8081/statistics/api/sales/hq/${date}/price`;
       console.log("hqShot() : ", url);
 
       await axios.get(url)
@@ -684,8 +690,9 @@ export default {
     },
     async hqList() {
       const date = this.startHQDate;
-
-      let url = `http://localhost:8081/statistics/api/sales/hq/${date}/team-price`;
+      const baseUrl = import.meta.env.VITE_API_STATISTICS_BASE_URL || 'http://localhost:8081';
+      let url = `${baseUrl}/api/sales/hq/${date}/team-price`;
+      //let url = `http://localhost:8081/statistics/api/sales/hq/${date}/team-price`;
       console.log("hqList() ", url);
 
       await axios.get(url)
