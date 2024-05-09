@@ -235,7 +235,7 @@ export default {
         .catch(error => {
           console.error('Error fetching data:', error);
         });
-      //팀 목록
+      //팀 목록 
       if(loginStore.getMemberRank !== 'FP'){
         axiosInstance.get(`${baseUrl}/api/team/list`)
           .then(response => {
