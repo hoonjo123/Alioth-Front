@@ -236,18 +236,21 @@ export default {
           console.error('Error fetching data:', error);
         });
       //팀 목록
-      axiosInstance.get(`${baseUrl}/api/team/list`)
-        .then(response => {
-          const data = response.data.result;
-          console.log(data)
-          data.forEach((item, index) => {
-            item.id = index + 1;
+      if(loginStore.getMemberRank !== 'FP'){
+        axiosInstance.get(`${baseUrl}/api/team/list`)
+          .then(response => {
+            const data = response.data.result;
+            console.log(data)
+            data.forEach((item, index) => {
+              item.id = index + 1;
+            });
+            rows.value = data;
+          })
+          .catch(error => {
+            console.log('Error fetching data:', error);
           });
-          rows.value = data;
-        })
-        .catch(error => {
-          console.log('Error fetching data:', error);
-        });
+      }
+
     };
 
     const submitChange = () => {
