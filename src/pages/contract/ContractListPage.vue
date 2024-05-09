@@ -1,75 +1,54 @@
 <template>
   <AppSidebar></AppSidebar>
-  <v-main>
-    <AppHeader></AppHeader>
-    <v-divider></v-divider>
-    <v-card style="margin-top: 10px; margin-left: 15px; border-radius: 15px;" max-width="1560">
-    <v-card flat>
-      <v-spacer></v-spacer>
+  <v-container fluid>
+    <v-main>
+      <AppHeader></AppHeader>
       <v-row align="center">
-        <v-col cols="4">
-          <v-text-field style="margin-bottom: 15px; margin-left: 15px; margin-top: 15px;"
-            v-model="search"
-            label="Search"
-            prepend-inner-icon="mdi-magnify"
-            variant="outlined"
+        <!--          <v-col cols="4" class="pa-2 ma-2">
+                    <v-text-field style="margin-bottom: 15px; margin-left: 15px; margin-top: 15px;"
+                                  v-model="search"
+                                  label="Search"
+                                  prepend-inner-icon="mdi-magnify"
+                                  variant="outlined"
+                                  dense>
+                    </v-text-field>
+                  </v-col>-->
+        <v-col cols="2" class="pa-2 ma-2">
+          <v-select
+            v-if="loginStore.memberRank==='HQ'"
+            v-model="selectedStatus"
+            :items="statusOptions"
+            item-title="key"
+            item-value="val"
+            label="Team Code"
+            outlined
             dense>
-          </v-text-field>
+          </v-select>
         </v-col>
 
-        <v-col class="d-flex justify-end">
-          <v-col cols="4">
-            <v-select
-              v-if="loginStore.memberRank==='HQ'"
-              v-model="selectedStatus"
-              :items="statusOptions"
-              item-title="key"
-              item-value="val"
-              label="Team Code"
-              outlined
-              dense>
-            </v-select>
-          </v-col>
-
-          <v-col cols="4">
-            <v-select
-              v-if="loginStore.memberRank==='MANAGER' || loginStore.memberRank==='HQ'"
-              v-model="selectedSMmember"
-              :items="salesMemberOptions"
-              label="Sales Member"
-              item-title="key"
-              item-value="val"
-              outlined
-              dense>
-            </v-select>
-          </v-col>
-
-          <v-col cols="1">
-            <v-btn
-              color="grey"
-              text
-              @click="navigateToAddModify">
-              계약추가
-            </v-btn>
-          </v-col>
+        <v-col cols="2">
+          <v-select
+            v-if="loginStore.memberRank==='MANAGER' || loginStore.memberRank==='HQ'"
+            v-model="selectedSMmember"
+            :items="salesMemberOptions"
+            label="Sales Member"
+            item-title="key"
+            item-value="val"
+            outlined
+            dense>
+          </v-select>
         </v-col>
 
-        <v-col cols="1">
-          <v-btn 
-            color="grey"
-            text
-            @click="downloadExcel">
-            엑셀다운로드
-          </v-btn>
+        <v-col class="text-right">
+          <v-btn variant="tonal" color="#2979FF" @click="navigateToAddModify" class="button-margin">계약 추가</v-btn>
+          <v-btn variant="tonal" color="#558B2F" @click="downloadExcel" style="margin-right: 1vw;">엑셀다운로드</v-btn>
         </v-col>
       </v-row>
-      <v-divider></v-divider>
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-      <ListComponent :columns="tableColumns" :rows="tableRows" @click:row="navigateToDetail"/>
-    </v-card>
-  </v-card>
-  </v-main>
+      <v-card style="margin-top: 1vw;">
+        <ListComponent :columns="tableColumns" :rows="tableRows" @click:row="navigateToDetail"/>
+      </v-card>
+    </v-main>
+  </v-container>
 </template>
 
 
@@ -109,7 +88,7 @@ export default {
     let salesMemberOptions = ref();
 
     const fetchData = () => {
-      const baseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:8080';
+      const baseUrl = import.meta.env.VITE_API_SERVER_BASE_URL || 'http://localhost:8080';
       axiosInstance.get(`${baseUrl}/api/contract/list`)
         .then(response => {
           let data = response.data.result;
@@ -142,24 +121,43 @@ export default {
           }
 
           if (useLoginInfoStore().memberRank === 'MANAGER') {
-            const newSalesMemberOptions = response.data.result
-              .filter(contract => contract.salesMemberResDto.teamCode === useLoginInfoStore().memberTeamCode)
-              .map(contract => ({
-                'key': contract.salesMemberResDto.name,
-                'val': contract.salesMemberResDto.salesMemberCode
-              }));
-            const uniqueSalesMemberOptions = Array.from(new Set(newSalesMemberOptions.map(JSON.stringify))).map(JSON.parse);
+            if(useLoginInfoStore().memberTeamCode === ''){
+              const newSalesMemberOptions = response.data.result
+                .filter(contract => contract.salesMemberResDto.salesMemberCode === useLoginInfoStore().memberCode)
+                .map(contract => ({
+                  'key': contract.salesMemberResDto.name,
+                  'val': contract.salesMemberResDto.salesMemberCode
+                }));
+              console.log(newSalesMemberOptions)
+              const uniqueSalesMemberOptions = Array.from(new Set(newSalesMemberOptions.map(JSON.stringify))).map(JSON.parse);
 
-            salesMemberOptions.value = [
-              ...salesMemberOptions.value,
-              ...uniqueSalesMemberOptions
-            ];
+              salesMemberOptions.value = [
+                ...salesMemberOptions.value,
+                ...uniqueSalesMemberOptions
+              ];
 
-            data = data.filter(contract => contract.salesMemberResDto.teamCode === useLoginInfoStore().memberTeamCode);
+              data = data.filter(contract => contract.salesMemberResDto.salesMemberCode === useLoginInfoStore().memberCode);
+            }else{
+              const newSalesMemberOptions = response.data.result
+                .filter(contract => contract.salesMemberResDto.teamCode === useLoginInfoStore().memberTeamCode)
+                .map(contract => ({
+                  'key': contract.salesMemberResDto.name,
+                  'val': contract.salesMemberResDto.salesMemberCode
+                }));
+              const uniqueSalesMemberOptions = Array.from(new Set(newSalesMemberOptions.map(JSON.stringify))).map(JSON.parse);
+
+              salesMemberOptions.value = [
+                ...salesMemberOptions.value,
+                ...uniqueSalesMemberOptions
+              ];
+
+              data = data.filter(contract => contract.salesMemberResDto.teamCode === useLoginInfoStore().memberTeamCode);
+            }
+
           }
 
           // console.log(response.data.result)
-          if(useLoginInfoStore().memberRank === 'FP'){
+          if (useLoginInfoStore().memberRank === 'FP') {
             data = data.filter(contract => contract.salesMemberResDto.salesMemberCode === useLoginInfoStore().getMemberCode);
           }
 
@@ -184,26 +182,26 @@ export default {
 
 
     const downloadExcel = () => {
-      const baseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:8080';
+      const baseUrl = import.meta.env.VITE_API_SERVER_BASE_URL || 'http://localhost:8080';
       const requestData = {
         startDate: null,
         endDate: null
       };
       let url = null
       if (useLoginInfoStore().memberRank === 'HQ') {
-        if(selectedStatus.value === null && selectedSMmember.value === null){
+        if (selectedStatus.value === null && selectedSMmember.value === null) {
           url = `${baseUrl}/api/excel/export/contract`
-        }else if(selectedStatus.value !== null && selectedSMmember.value === null){
+        } else if (selectedStatus.value !== null && selectedSMmember.value === null) {
           url = `${baseUrl}/api/excel/export/contract/${selectedStatus.value}`
-        }else if(selectedStatus.value !== null && selectedSMmember.value !== null){
+        } else if (selectedStatus.value !== null && selectedSMmember.value !== null) {
           url = `${baseUrl}/api/excel/export/contract/${selectedSMmember.value}`
         }
       }
 
       if (useLoginInfoStore().memberRank === 'MANAGER') {
-        if(selectedSMmember.value === null){
+        if (selectedSMmember.value === null) {
           url = `${baseUrl}/api/excel/export/contract`
-        }else {
+        } else {
           url = `${baseUrl}/api/excel/export/contract/${selectedSMmember.value}`
         }
       }
@@ -275,12 +273,16 @@ export default {
 
 
 <style scoped>
-.v-text-field, .v-select, .v-btn {
+.v-text-field, .v-select {
   height: 50px;
 }
 
 .d-flex.justify-end {
   display: flex;
   justify-content: flex-end;
+}
+
+.button-margin {
+  margin-right: 10px; /* 원하는 간격 값으로 조정하세요 */
 }
 </style>

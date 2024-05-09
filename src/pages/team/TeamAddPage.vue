@@ -1,29 +1,31 @@
 <template>
   <AppSidebar></AppSidebar>
+  <v-container fluid>
   <v-main>
     <AppHeader></AppHeader>
-    <v-container fluid>
       <v-row justify="center">
         <v-col cols="12" md="8">
-          <v-card>
-            <v-card-text>
+          <v-card style="margin-top: 2vw;">
+            <v-card-text >
               <v-form @submit.prevent="submitForm">
-                <span>팀 명</span>
-                <v-text-field v-model="form.teamName" label="이름을 입력하세요" required></v-text-field>
-                <span>팀장</span>
+                <span style="font-size: 14pt ; margin-top: 3vw;">팀 명</span>
+                <v-text-field v-model="form.teamName" label="이름을 입력하세요" required style="margin-bottom: 2vw; margin-top: 1vw;"></v-text-field>
+                  <span style="font-size: 14pt ;">팀장</span>
+                  <v-spacer></v-spacer>
+                <v-text-field type="text" v-model="form.name" placeholder="이름" @click="navigateToList" readonly/>
+                <v-text-field type="text" v-model="form.teamManagerCode" placeholder="사원번호" @click="navigateToList" readonly/>
                 <v-spacer></v-spacer>
-                <v-btn id="postcode" type="button" @click="navigateToList" value="매니저 목록">조회</v-btn>
-                <v-text-field type="text" v-model="form.name" placeholder="이름" readonly/>
-                <v-text-field type="text" v-model="form.teamManagerCode" placeholder="사원번호" readonly/>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" type="submit">등록</v-btn>
+                <v-col class="text-right">
+                  <v-btn color="#2979FF" variant="tonal" type="submit" style="margin-top: 1vw;">등록</v-btn>
+                </v-col>
               </v-form>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
-    </v-container>
   </v-main>
+  </v-container>
+
   <v-dialog v-model="modalOpen" width="auto">
     <v-card>
       <v-card-title>
@@ -38,14 +40,14 @@
         </v-container>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="" @click="closeModal">닫기</v-btn>
+        <v-btn color="#2C3E50" variant="tonal" @click="closeModal">닫기</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 <script>
 
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import AppSidebar from "@/layouts/AppSidebar.vue";
 import AppHeader from "@/layouts/AppHeader.vue";
 import axiosInstance from "@/plugins/loginaxios";
@@ -64,6 +66,7 @@ export default {
       {title: "이름", key: "name"},
       {title: "사원번호", key: "salesMemberCode"},
     ];
+    const search = ref('');
     const rows = ref([]);
     const teamName = ref('');
     const teamManagerCode = ref('');
@@ -81,20 +84,33 @@ export default {
     }
 
     const fetchData = () => {
-      const baseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:8080';
+      const baseUrl = import.meta.env.VITE_API_SERVER_BASE_URL || 'http://localhost:8080';
       axiosInstance.get(`${baseUrl}/api/members/list/manager`)
         .then(response => {
           const data = response.data.result;
           console.log(data)
-          data.forEach((item, index) => {
+
+          const filteredData = data.filter(item => {
+            const name = item.name.toLowerCase();
+            const salesMemberCode = item.salesMemberCode.toString().toLowerCase();
+            return name.includes(search.value) || salesMemberCode.includes(search.value);
+          });
+
+          filteredData.forEach((item, index) => {
             item.id = index + 1;
           });
-          rows.value = data;
+
+          rows.value = filteredData;
         })
         .catch(error => {
           console.log('Error fetching data:', error);
         });
     };
+
+    watch(search, () => {
+      fetchData();
+    });
+
     onMounted(() => {
       fetchData();
     });
@@ -105,7 +121,7 @@ export default {
           ...form.value,
         };
         console.log(formData)
-        const baseUrl = process.env.VUE_APP_API_BASE_URL || 'http://localhost:8080';
+        const baseUrl = import.meta.env.VITE_API_SERVER_BASE_URL || 'http://localhost:8080';
         axiosInstance.post(`${baseUrl}/api/team/create`, formData)
           .then(response => {
             alert(response.data.message)
@@ -126,6 +142,7 @@ export default {
       modalOpen,
       tableColumns,
       rows,
+      search,
       name,
       teamManagerCode,
       select,

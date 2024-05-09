@@ -21,25 +21,25 @@ export default defineComponent({
 
     async function fetchMemberTarget() {
       try {
-        const memberCode = useLoginInfoStore().memberCode;
-        const startDate = useSalesStore().startDate;
-
+        const teamCode = useLoginInfoStore().memberTeamCode;
+        const teamDate = useSalesStore().startTeamDate;
         const baseUrl = import.meta.env.VITE_API_STATISTICS_BASE_URL || 'http://localhost:8081/statistics';
-        const url = `${baseUrl}/api/stat/sales/${memberCode}/${startDate}/target`;
-        // const url = `http://localhost:8081/api/stat/sales/${memberCode}/${startDate}/target`;
+        const url = `${baseUrl}/api/sales/${teamCode}/${teamDate}/target`;
+        // const url = `http://localhost:8081/statistics/api/sales/${teamCode}/${teamDate}/target`;
         console.log(url);
         const response = await axios.get(url);
         const result = response.data.result || {};
         // 데이터를 업데이트합니다.
+        console.log(result);
         chartData.value.splice(1);
-        chartData.value.push(['', result.target || 0, result.price || 0]);
+        chartData.value.push(['', result.targetPrice || 0, result.price || 0]);
       } catch (error) {
         console.log("요청할 수 없습니다. : ", error);
       }
     }
 
     // startDate 값이 변경될 때마다 fetchMemberTarget 함수 호출하여 차트 다시 그리기
-    watch(() => useSalesStore().startDate, () => {
+    watch(() => useSalesStore().startTeamDate, () => {
       fetchMemberTarget();
     });
 
